@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
-import { isValid, parseISO } from "date-fns";
 import axios from "axios";
 import dotenv from "dotenv";
 
 import { FilterClauseType, ResponseData } from "./types";
+import { compareValues, isValidDateString } from "./utils";
 
 dotenv.config();
 
@@ -12,43 +12,6 @@ const PORT = process.env.PORT || 3000;
 
 const apiKey = process.env.API_KEY;
 const demoFormId = process.env.DEMO_FORM_ID;
-
-/**
- * Function to determin validity of a string to be used as a date
- * @param dateString - Any given string
- * @returns bool - True if a valid string
- */
-const isValidDateString = (dateString: string) => {
-  const parsedDate = parseISO(dateString);
-  return isValid(parsedDate);
-};
-
-/**
- * Compares the filter values with the value of the question to filter out any
- * questions
- * @param value - A number or a string
- * @param filterValue - A number or a string
- * @param condition - Conditional comparison checks
- * @returns bool - True if comparision check is valid
- */
-const compareValues = (
-  value: any,
-  filterValue: any,
-  condition: FilterClauseType["condition"]
-) => {
-  switch (condition) {
-    case "equals":
-      return value == filterValue;
-    case "does_not_equal":
-      return value != filterValue;
-    case "greater_than":
-      return value > filterValue;
-    case "less_than":
-      return value < filterValue;
-    default:
-      return false;
-  }
-};
 
 app.get("/", (req, res) => {
   const htmlContent = `

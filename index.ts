@@ -142,11 +142,15 @@ app.get("/:formId/filteredResponses", async (req: Request, res: Response) => {
     const filtered = responses.responses.length - filteredResponses.length;
     console.log("Filtered Responses: ", filtered);
 
-    res.json({
+    const data = {
       responses: filteredResponses,
       totalReponses: filteredResponses.length,
-      pageCount: Math.ceil(filteredResponses.length) / Number(limit),
-    });
+      pageCount: Math.ceil(filteredResponses.length / Number(limit)),
+    };
+
+    const prettify = JSON.stringify(data, null, 4);
+    res.setHeader("Content-Type", "application/json");
+    res.send(prettify);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });

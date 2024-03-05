@@ -50,6 +50,28 @@ const compareValues = (
   }
 };
 
+app.get("/", (req, res) => {
+  const htmlContent = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <title>John Scipion - Application</title>
+      </head>
+      <body>
+        <h1>Welcome!</h1>
+        <p>If you would like to see some responses please navigate to https://{domain}/{formId}/filteredResponses</p>
+        <p>Add any desired query parameters</p>
+        <p>Example generic fillout query param: ?beforeDate=2024-03-01</p>
+        <p>Example filter query param: ?filters=[{"id":"jB2qDRcXQ8Pjo1kg3jre2J","condition":"equals","value":"Engineering"}]</p>
+        <p>Query Params can be combined using & symbol. Example: ?beforeDate=2024-03-01&filters=[{"id":"jB2qDRcXQ8Pjo1kg3jre2J","condition":"equals","value":"Engineering"}] </p>
+      </body>
+      </html>
+    `;
+
+  res.send(htmlContent);
+});
+
 app.get("/:formId/filteredResponses", async (req: Request, res: Response) => {
   const { formId } = req.params;
   const limit = req.query.limit ? Math.min(Number(req.query.limit), 150) : 150;
